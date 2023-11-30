@@ -40,7 +40,7 @@ def signed_distance_polygon(point, polygon_vertices):
     return s * d
 
 def curve_point_nurbs(control_pts=[[-0.7, 0.7, 0], [0, 0.7, 0], [0.7, 0.7, 0], [0.7, 0, 0], [0.7, -0.7, 0], [-0.7, 0, 0],[-0.7,-0.7,0],[-0.7,0,0],[-0.7, 0.7, 0]],knotvec= [0, 0,0,0.14285714,0.28571429,0.42857143,0.57142857,0.71428571,0.85714286,1, 1, 1],
-                delta=0.003):
+                delta=0.007):
     # Create a 3-dimensional B-spline Curve
     curve = NURBS.Curve()
 

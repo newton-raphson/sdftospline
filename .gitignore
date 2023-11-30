@@ -2,6 +2,9 @@
 __pycache__/
 *.py[cod]
 *$py.class
+experiment/*.npy
+experiment/images*
+experiment/*.out
 
 # C extensions
 *.so
