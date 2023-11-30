@@ -5,7 +5,7 @@ __pycache__/
 experiment/*.npy
 experiment/images*
 experiment/*.out
-
+.DS_Store/
 # C extensions
 *.so
 
