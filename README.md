@@ -33,4 +33,5 @@ conda activate spline
 ## Validation 
 ```validation`` folder contains dummy files to test the code for reproducibility
 
+## Visualization of Results
 ![Result Visualization](test_results_visualization.gif)
