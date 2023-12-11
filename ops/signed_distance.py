@@ -1,3 +1,5 @@
+import sys
+sys.path.append('/work/mech-ai-scratch/samundra/experiments/splinetofield')
 import numpy as np
 from geomdl import NURBS
 import time

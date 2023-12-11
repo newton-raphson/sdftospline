@@ -1,11 +1,17 @@
-# Byte-compiled / optimized / DLL files
+experiments/splinetofield/dataloader/loader.py# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+experiment/
 experiment/*.npy
 experiment/images*
 experiment/*.out
 .DS_Store/
+*.pkl
+*.pth
+*.log
+*.out
+*.png
 # C extensions
 *.so
 

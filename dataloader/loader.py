@@ -8,11 +8,14 @@ class CustomDataset(Dataset):
     @staticmethod
     def return_test_train(root_dir, test_size=0.1, random_state=22):
         image_data = []  # Use a local variable to collect images
-        for file in sorted(os.listdir(os.path.join(root_dir, "images"))):
-            if file.endswith(".npy"):
-                image = np.load(os.path.join(root_dir, "images", file), allow_pickle=True)
-                image_data.append(image)
+        files = os.listdir(os.path.join(root_dir, "images2"))
+        for i in range(len(files)):
+            image = np.load(os.path.join(root_dir, "images2", f"signed_distances{i}.npy"), allow_pickle=True)
+            image_data.append(image)
 
+            if len(image_data) == 1000:
+                print("Loaded 19000 images")
+                break
         # this loads all the control points
         data = np.array(image_data)
         control_points = np.load(os.path.join(root_dir, "lhs_ctrlpts.npy"), allow_pickle=True)
@@ -28,9 +31,17 @@ class CustomDataset(Dataset):
             torch.tensor(test_data_sdf, dtype=torch.float32),
         )
 
-    def __init__(self, control_points, signed_distance_functions):
-        self.control_points = control_points
-        self.signed_distance_functions = signed_distance_functions
+    def __init__(self, control_points, signed_distance_functions, perturb_control_points):
+        if perturb_control_points:
+            self.control_points, self.signed_distance_functions = self.increase_data(
+                control_points, signed_distance_functions
+            )
+        else:
+            self.control_points = control_points
+            self.signed_distance_functions = signed_distance_functions
+        # self.control_points = control_points
+        # self.signed_distance_functions = signed_distance_functions
+        # self.perturb_control_points = perturb_control_points
 
     def __len__(self):
         return len(self.control_points)
@@ -39,38 +50,27 @@ class CustomDataset(Dataset):
         control_point = self.control_points[idx]
         sdf = self.signed_distance_functions[idx]
         return {"control_point": control_point, "signed_distance_function": sdf}
-
-# Example usage:
-root_dir = '/Users/samundrakarki/Desktop/ME625/FYP/splinetofield/dataloader/'
-train_data_cp, test_data_cp, train_data_sdf, test_data_sdf = CustomDataset.return_test_train(root_dir)
+        # Apply perturbation to control points
 
 
-# Create a CustomDataset instance
-custom_dataset = CustomDataset(train_data_cp, train_data_sdf)
+    def increase_data(self, control_points, sdf, perturbation_factor=0.001, num_times=20):
+        augmented_control_points = control_points
+        augmented_sdf = sdf
 
-# Create DataLoader for training set
-batch_size = 2
-train_loader = DataLoader(dataset=custom_dataset, batch_size=batch_size, shuffle=True)
+        for _ in range(num_times):
+            # Generate random noise with the same shape as control_points
+            noise = torch.rand_like(control_points) * 2 * perturbation_factor - perturbation_factor
 
-# Assuming you have a DataLoader named train_loader
-batch_iterator = iter(train_loader)
-batch = next(batch_iterator)
+            # Add the noise to control_points
+            perturbed_control_points = control_points + noise
+            perturbed_sdf = sdf
 
-#  conver the input and output to numpy
-x_data_np = batch['control_point'].numpy()
-y_data_np = batch['signed_distance_function'].numpy()
-print(x_data_np.shape)
-print(y_data_np.shape)
+            # Concatenate perturbed data with the original data
+            augmented_control_points = torch.cat((augmented_control_points, perturbed_control_points), dim=0)
+            augmented_sdf = torch.cat((augmented_sdf, perturbed_sdf), dim=0)
 
-# # Plotting the input
-# plt.subplot(1, 2, 1)
-# plt.imshow(x_data_np[0, 0, :, :], cmap='gray')  # Assuming a grayscale image
-# plt.title('Input Image')
+        return augmented_control_points, augmented_sdf
 
-# # Plotting the output
-# plt.subplot(1, 2, 2)
-# plt.imshow(y_data_np[0, 0, :, :], cmap='gray')  # Assuming a grayscale image
-# plt.title('Output Image')
 
-# plt.show()
+
 

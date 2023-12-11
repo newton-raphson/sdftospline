@@ -8,7 +8,7 @@
 #SBATCH --nodes=1   # number of nodes
 #SBATCH --ntasks-per-node=32  
 #SBATCH --mem=128G   # maximum memory per node
-#SBATCH --job-name="gen"
+#SBATCH --job-name="128gen11184"
 #SBATCH --mail-user=samundra@iastate.edu   # email address
 #SBATCH --mail-type=BEGIN
 #SBATCH --mail-type=END
@@ -18,4 +18,4 @@
 module load miniconda3
 source activate spline
 
-python ../ops/test.py
+python ../ops/generate.py 

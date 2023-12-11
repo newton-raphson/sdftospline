@@ -1,0 +1,7 @@
+[Settings]
+mode = test
+batch_size = 1
+learning_rate = 0.001
+epochs = 10
+root_directory = /work/mech-ai-scratch/samundra/experiments/splinetofield/experiment
+save_path = /work/mech-ai-scratch/samundra/experiments/splinetofield/experiment/test3_19k_augmented
