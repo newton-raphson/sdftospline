@@ -31,7 +31,7 @@ conda activate spline
 4. Run inference script with ```python main.py $(pwd)/config.txt``  with "mode" set to test
 
 ## Validation 
-```validation`` folder contains dummy files to test the code for reproducibility
+```validation```  folder contains dummy files to test the code for reproducibility
 
 ## Visualization of Results
 ![Result Visualization](test_results_visualization.gif)
